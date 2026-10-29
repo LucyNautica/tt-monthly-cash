@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tuscany Tours — Cash</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Spectral:wght@300;400&display=swap">
+<style>
+  /* Palette taken from the Tuscany Tours mark: its maroon and the olive of the cypresses. */
+  :root {
+    --bg: #FAF8F5; --panel: #FFFFFF; --line: #E3DED6;
+    --fg: #241F1C; --muted: #6E655D;
+    --accent: #8C1D18; --olive: #6F7F43; --sand: #B08344; --slate: #4A6670;
+    --ok: #4F6B3A; --warn: #9A6212; --bad: #8C1D18;
+    --radius: 10px; --gap: 1rem; --pad: 1.25rem;
+    --sans: 'Archivo', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --serif: 'Spectral', ui-serif, Georgia, 'Times New Roman', serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17140F; --panel: #201C17; --line: #332D25;
+      --fg: #F2EDE5; --muted: #A79B8D;
+      --accent: #D4756B; --olive: #9DB167; --sand: #D1A264; --slate: #7FA0AC;
+      --ok: #8FB36A; --warn: #D6A24A; --bad: #D4756B;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17140F; --panel: #201C17; --line: #332D25;
+    --fg: #F2EDE5; --muted: #A79B8D;
+    --accent: #D4756B; --olive: #9DB167; --sand: #D1A264; --slate: #7FA0AC;
+    --ok: #8FB36A; --warn: #D6A24A; --bad: #D4756B;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1120px; margin-inline: auto; padding-block: 2.5rem 4rem;
+          padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+  .gate { position: fixed; inset: 0; background: var(--bg); display: grid; place-items: center; z-index: 50;
+          padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .gate form { width: min(100%, 22rem); text-align: left; }
+  .gate img { width: 190px; max-width: 60%; height: auto; margin-bottom: 1.4rem; }
+  .gate h1 { font-family: var(--serif); font-weight: 400; font-size: 1.5rem; line-height: 1.2; margin: 0 0 .3rem; }
+  .gate .sub { font-size: .8rem; color: var(--muted); margin: 0 0 1.75rem; }
+  .gate label { display: block; font-size: .8rem; color: var(--muted); margin-bottom: .4rem; }
+  .gate input { width: 100%; padding: .65rem .75rem; font: inherit; color: var(--fg);
+                background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+  .gate input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .gate button { margin-top: .75rem; width: 100%; padding: .65rem; font: inherit; font-weight: 500; cursor: pointer;
+                 color: #fff; background: var(--accent); border: 0; border-radius: 8px; }
+  .gate .err { color: var(--bad); font-size: .8rem; margin-top: .6rem; min-height: 1.2em; }
+
+  .logo { display: block; width: 200px; max-width: 55%; height: auto; margin-bottom: 1.25rem; }
+  .eyebrow { font-size: .75rem; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin: 0 0 .35rem; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.12; margin: 0 0 .5rem; text-wrap: balance; }
+  .take { color: var(--muted); margin: 0; max-width: 62ch; }
+
+  section { margin-top: 3rem; }
+  h2 { font-size: 1.05rem; font-weight: 600; margin: 0 0 .3rem; }
+  .note { font-size: .82rem; color: var(--muted); margin: 0 0 1rem; max-width: 72ch; }
+
+  .grid { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--pad); min-width: 0; }
+  .card.lead { border-left: 3px solid var(--accent); }
+  .k { font-size: .75rem; color: var(--muted); margin: 0 0 .3rem; }
+  .v { font-family: var(--serif); font-weight: 400; font-size: clamp(1.6rem, 4.4vw, 2rem); line-height: 1.1;
+       font-variant-numeric: tabular-nums; margin: 0; }
+  .s { font-size: .75rem; color: var(--muted); margin: .4rem 0 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--line); }
+  th { font-size: .74rem; font-weight: 500; color: var(--muted); letter-spacing: .02em; }
+  td.n, th.n { text-align: right; white-space: nowrap; }
+  td.why { color: var(--muted); font-size: .78rem; }
+  tbody tr:last-child td { border-bottom: none; }
+  .scroll { overflow-x: auto; }
+
+  .foot { display: flex; flex-wrap: wrap; gap: 1.25rem; margin: 1rem 0 0; font-variant-numeric: tabular-nums; }
+  .foot span { font-size: .75rem; color: var(--muted); display: inline-flex; align-items: baseline; gap: .4rem; }
+  .foot b { font-size: .95rem; font-weight: 500; color: var(--fg); }
+
+  .chart { width: 100%; min-height: 320px; position: relative; }
+  .tip { position: absolute; background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+         box-shadow: 0 6px 20px rgba(0,0,0,.14); padding: .4rem .6rem; font-size: .76rem; pointer-events: none;
+         opacity: 0; font-variant-numeric: tabular-nums; transition: opacity .12s; }
+  .tip .h { color: var(--muted); margin-bottom: .15rem; }
+  .tip .r { display: flex; align-items: center; gap: .4rem; }
+  .sw { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+
+  .key { display: flex; flex-wrap: wrap; gap: 1.1rem; font-size: .76rem; color: var(--muted); margin-top: .75rem; }
+  .key span { display: inline-flex; align-items: center; gap: .4rem; }
+  .key i { width: 18px; height: 0; border-top: 2px solid currentColor; flex: none; }
+
+  ul.list { list-style: none; padding: 0; margin: 0; display: grid; gap: .7rem; }
+  ul.list li { display: grid; grid-template-columns: 7rem 1fr; gap: .75rem; align-items: start; font-size: .9rem; }
+  ul.list .who { font-size: .75rem; color: var(--muted); padding-top: .12rem; }
+  @media (max-width: 30rem) { ul.list li { grid-template-columns: 1fr; gap: .1rem; } }
+
+  footer { margin-top: 3.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); font-size: .75rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <form id="gateForm" autocomplete="off">
+    <img src="data:image/png;base64,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" alt="Tuscany Tours">
+    <h1>Monthly cash analysis</h1>
+    <p class="sub">Tuscany Tours &middot; prepared by Transcend Consultancy</p>
+    <label for="pw">Password</label>
+    <input id="pw" name="pw" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Open</button>
+    <p class="err" id="err" role="status"></p>
+  </form>
+</div>
+
+<div class="wrap" id="page" hidden>
+  <header>
+    <img class="logo" src="data:image/png;base64,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" alt="Tuscany Tours">
+    <p class="eyebrow">At 30 September 2026</p>
+    <h1>Where the money is</h1>
+    <p class="take">What is in the bank, how much of it is already spoken for, and what goes out between now and the end of 2027.</p>
+  </header>
+
+  <section>
+    <div class="grid">
+      <div class="card lead"><p class="k">Total cash</p><p class="v" id="f-total">&mdash;</p><p class="s">Every account, including Truist and Janney.</p></div>
+      <div class="card"><p class="k">Already spoken for</p><p class="v" id="f-committed">&mdash;</p><p class="s">Suppliers on trips already sold, plus balance sheet liabilities.</p></div>
+      <div class="card"><p class="k">Not spoken for</p><p class="v" id="f-free">&mdash;</p><p class="s">Free once every trip already sold is delivered and paid for.</p></div>
+      <div class="card"><p class="k">Cash lasts until</p><p class="v">Aug 2028</p><p class="s">If not one more booking were taken: every trip already sold still runs, and $87,015 a month of running costs continues.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Total cash, through to the end of 2027</h2>
+    <p class="note">Actual to September, forecast to December, then modelled. The low point is December 2026 at about $1.65M; the peak is August 2027 near $3.4M. The dotted line is the floor: not one more booking taken, every trip already sold still delivered, running costs continuing. On that basis there is $631,000 left at the end of 2027 and the money lasts into August 2028.</p>
+    <div class="card">
+      <div class="chart" id="cashChart"></div>
+      <div class="key">
+        <span><i></i> Actual</span>
+        <span><i style="border-top-style: dashed"></i> Forecast, then modelled</span>
+        <span><i style="border-top-style: dotted"></i> If not one more booking were taken</span>
+        <span style="opacity:.75"><i></i> Working bank account only</span>
+      </div>
+      <p class="note" style="margin: 1rem 0 0">The working bank account on its own dips below zero from October to January, so money has to move across from Truist or Janney. Janney needs two days' notice.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>What goes out, and when</h2>
+    <p class="note">Monthly to December, then by quarter. October alone carries almost two thirds of what is left to pay this year.</p>
+    <div class="card"><div class="chart" id="outChart"></div></div>
+  </section>
+
+  <section>
+    <h2>Where it sits</h2>
+    <div class="card">
+      <div class="scroll"><table><thead><tr><th>Account</th><th class="n">Balance</th><th>Note</th></tr></thead><tbody id="t-cash"></tbody></table></div>
+      <p class="foot">
+        <span>Operating <b id="f-op">&mdash;</b></span>
+        <span>Reserves <b id="f-res">&mdash;</b></span>
+        <span>Total <b id="f-tot2">&mdash;</b></span>
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>What is already spoken for</h2>
+    <div class="card">
+      <div class="scroll"><table><thead><tr><th>Commitment</th><th class="n">Amount</th><th>Note</th></tr></thead><tbody id="t-commit"></tbody></table></div>
+      <p class="foot">
+        <span>Suppliers <b id="f-sup">&mdash;</b></span>
+        <span>Other liabilities <b id="f-oth">&mdash;</b></span>
+        <span>Total <b id="f-tot3">&mdash;</b></span>
+      </p>
+      <p class="note" style="margin: .75rem 0 0">The EIDL loan of $197,964 is excluded. It is long-term debt, not a call on cash this year.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cost of sales</h2>
+    <p class="note">What it costs to deliver each dollar of revenue. Public tours are the better margin when they fill &mdash; and the worse one when they do not.</p>
+    <div class="card scroll">
+      <table><thead><tr><th>Basis</th><th>Period</th><th class="n">Revenue</th><th class="n">Cost of sales</th><th class="n">% of revenue</th><th>Note</th></tr></thead><tbody id="t-ratio"></tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <h2>How this is built</h2>
+    <ul class="list">
+      <li><span class="who">Reliable</span><span>Account balances and liabilities from QuickBooks. Private client supplier payments from Ruveen&rsquo;s own table, which she works from daily.</span></li>
+      <li><span class="who">Calculated</span><span>Public tour costs are not in Airtable &mdash; they sit in a separate Excel costing file per tour. These figures come from what a seat actually cost on the three spring departures that filled: $3,612 each.</span></li>
+      <li><span class="who">Modelled</span><span>All of 2027, at $3,750 a seat across twenty departures, $8,642 a private client trip, $34,015 a month of client management and commissions, $53,000 of overheads, and $4.0M of revenue on 2026&rsquo;s monthly shape. That is 69% cost of sales against 75% in both 2024 and 2025, so it is mildly optimistic.</span></li>
+      <li><span class="who">The floor</span><span>The dotted line assumes no new sales at all from today. The 82 public tour seats and six private client trips already sold for 2027 still run, bringing in their balances and incurring their costs, which is why it falls more slowly than the running costs alone.</span></li>
+      <li><span class="who">To fix it</span><span>The November session with Rubina and Ruveen puts the tour costings into Airtable. The estimated trip value column agreed on 6 October gives private clients a revenue figure to set cost against.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Open items</h2>
+    <ul class="list">
+      <li><span class="who">Ruveen</span><span>Stripe clearing holds $99,365 and keeps growing, because Stripe raises QuickBooks invoices under a name that does not match. Excluded from total cash until it is resolved.</span></li>
+      <li><span class="who">Ruveen</span><span>La Vie en Rose ran 3 to 10 October with $119,950 invoiced in July and no supplier cost recorded against it. The $70,000 here is an estimate.</span></li>
+      <li><span class="who">Dave</span><span>Federal tax shows as a $61,271 debit, which would mean it is prepaid, and the 401(k) liability has not moved from $44,642 all year.</span></li>
+      <li><span class="who">Pam</span><span>Can the Truist CDs be broken early, and is Janney there to fund the autumn cycle?</span></li>
+    </ul>
+  </section>
+
+  <footer>Prepared by Transcend Consultancy from the September 2026 QuickBooks close and Airtable exports at 29 October 2026.</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  var DATA = {"cash_position":[{"account":"Exchange Bank \u2014 checking","group":"Operating","amount":"219958","note":"Main operating account"},{"account":"EURO Moneycorp","group":"Operating","amount":"12641","note":"EUR float for supplier payments"},{"account":"Exchange Bank \u2014 savings","group":"Operating","amount":"1805","note":"Was $106780 in January"},{"account":"Exchange Bank \u2014 cash withdrawal","group":"Operating","amount":"1266","note":"Working float"},{"account":"Chase business","group":"Operating","amount":"11715","note":"Drawn down through the year"},{"account":"Undeposited funds","group":"Operating","amount":"1014","note":"Taken but not yet banked"},{"account":"Petty cash","group":"Operating","amount":"25","note":"Negligible"},{"account":"Truist CDs","group":"Reserve","amount":"971087","note":"Can these be broken early? Unanswered"},{"account":"Janney money market","group":"Reserve","amount":"1060319","note":"Two days notice to withdraw"}],"commitments":[{"item":"Public tour suppliers","group":"Suppliers","amount":"272188","note":"Trips already sold. Built from actual cost per seat on completed departures"},{"item":"Private client suppliers","group":"Suppliers","amount":"343045","note":"Ruveen's own unpaid lines"},{"item":"La Vie en Rose","group":"Suppliers","amount":"70000","note":"Estimate. No cost recorded against this departure at all"},{"item":"401(k) liability","group":"Other","amount":"44642","note":"Unchanged all year"},{"item":"Credit cards","group":"Other","amount":"8398","note":"Net across company cards"},{"item":"Payroll clearing","group":"Other","amount":"10758","note":"Unchanged all year"}],"cost_ratio":[{"basis":"Whole business","period":"2024","revenue":"3852783","cost_of_sales":"2925967","pct":"0.759","note":"Full year from QuickBooks. Clean."},{"basis":"Whole business","period":"2025","revenue":"3771753","cost_of_sales":"2825354","pct":"0.749","note":"Full year from QuickBooks. Within one point of 2024."},{"basis":"Public tours \u2014 the three that sold","period":"2026 spring","revenue":"315904","cost_of_sales":"205969","pct":"0.652","note":"Loire 15 seats","null":[" Croatia 18"," Tuscany 15. All-in"," including a share of client management and commissions."]},{"basis":"Public tours \u2014 including the one that did not","period":"2026 spring","revenue":"340337","cost_of_sales":"236534","pct":"0.695","note":"Adds Amalfi in May, which ran with three passengers at 106% of its own revenue."},{"basis":"Private clients and groups","period":"2025 implied","revenue":"2581321","cost_of_sales":"1992052","pct":"0.772","note":"Backed out: total cost of sales less public tours at 70%. Cannot be measured directly until private client trips carry values."}],"cash_path":[{"month":"2026-01","label":"Jan 26","phase":"Actual","money_in":"312187","money_out":"159510","total_budget":"2577402","total_no_bookings":"2577402","operating_budget":"545996","operating_no_bookings":"545996"},{"month":"2026-02","label":"Feb 26","phase":"Actual","money_in":"574150","money_out":"113161","total_budget":"3067731","total_no_bookings":"3067731","operating_budget":"1036325","operating_no_bookings":"1036325"},{"month":"2026-03","label":"Mar 26","phase":"Actual","money_in":"244888","money_out":"203855","total_budget":"2437607","total_no_bookings":"2437607","operating_budget":"406201","operating_no_bookings":"406201"},{"month":"2026-04","label":"Apr 26","phase":"Actual","money_in":"239728","money_out":"386767","total_budget":"2242297","total_no_bookings":"2242297","operating_budget":"210891","operating_no_bookings":"210891"},{"month":"2026-05","label":"May 26","phase":"Actual","money_in":"434014","money_out":"323036","total_budget":"2319833","total_no_bookings":"2319833","operating_budget":"288427","operating_no_bookings":"288427"},{"month":"2026-06","label":"Jun 26","phase":"Actual","money_in":"582150","money_out":"324221","total_budget":"2494629","total_no_bookings":"2494629","operating_budget":"463223","operating_no_bookings":"463223"},{"month":"2026-07","label":"Jul 26","phase":"Actual","money_in":"965892","money_out":"306069","total_budget":"2718147","total_no_bookings":"2718147","operating_budget":"686741","operating_no_bookings":"686741"},{"month":"2026-08","label":"Aug 26","phase":"Actual","money_in":"398022","money_out":"308801","total_budget":"2749977","total_no_bookings":"2749977","operating_budget":"718571","operating_no_bookings":"718571"},{"month":"2026-09","label":"Sep 26","phase":"Actual","money_in":"81984","money_out":"475720","total_budget":"2279830","total_no_bookings":"2279830","operating_budget":"248424","operating_no_bookings":"248424"},{"month":"2026-10","label":"Oct 26","phase":"Forecast","money_in":"45000","money_out":"526714","total_budget":"1798116","total_no_bookings":"1753116","operating_budget":"-233290","operating_no_bookings":"-278290"},{"month":"2026-11","label":"Nov 26","phase":"Forecast","money_in":"55000","money_out":"199134","total_budget":"1653982","total_no_bookings":"1553982","operating_budget":"-377424","operating_no_bookings":"-477424"},{"month":"2026-12","label":"Dec 26","phase":"Forecast","money_in":"113000","money_out":"115263","total_budget":"1651719","total_no_bookings":"1438719","operating_budget":"-379687","operating_no_bookings":"-592687"},{"month":"2027-01","label":"Jan 27","phase":"Modelled","money_in":"308637","money_out":"144759","total_budget":"1815597","total_no_bookings":"1351704","operating_budget":"-215809","operating_no_bookings":"-679702"},{"month":"2027-02","label":"Feb 27","phase":"Modelled","money_in":"567620","money_out":"173631","total_budget":"2209586","total_no_bookings":"1331276","operating_budget":"178180","operating_no_bookings":"-700130"},{"month":"2027-03","label":"Mar 27","phase":"Modelled","money_in":"242103","money_out":"196807","total_budget":"2254882","total_no_bookings":"1445727","operating_budget":"223476","operating_no_bookings":"-585679"},{"month":"2027-04","label":"Apr 27","phase":"Modelled","money_in":"237002","money_out":"330929","total_budget":"2160955","total_no_bookings":"1366649","operating_budget":"129549","operating_no_bookings":"-664757"},{"month":"2027-05","label":"May 27","phase":"Modelled","money_in":"429078","money_out":"442071","total_budget":"2147962","total_no_bookings":"1194884","operating_budget":"116556","operating_no_bookings":"-836522"},{"month":"2027-06","label":"Jun 27","phase":"Modelled","money_in":"575530","money_out":"329003","total_budget":"2394489","total_no_bookings":"1053869","operating_budget":"363083","operating_no_bookings":"-977537"},{"month":"2027-07","label":"Jul 27","phase":"Modelled","money_in":"954906","money_out":"194881","total_budget":"3154514","total_no_bookings":"1098889","operating_budget":"1123108","operating_no_bookings":"-932517"},{"month":"2027-08","label":"Aug 27","phase":"Modelled","money_in":"393496","money_out":"168131","total_budget":"3379879","total_no_bookings":"1119140","operating_budget":"1348473","operating_no_bookings":"-912266"},{"month":"2027-09","label":"Sep 27","phase":"Modelled","money_in":"81052","money_out":"308145","total_budget":"3152786","total_no_bookings":"997523","operating_budget":"1121380","operating_no_bookings":"-1033883"},{"month":"2027-10","label":"Oct 27","phase":"Modelled","money_in":"44488","money_out":"580963","total_budget":"2616311","total_no_bookings":"840008","operating_budget":"584905","operating_no_bookings":"-1191398"},{"month":"2027-11","label":"Nov 27","phase":"Modelled","money_in":"54374","money_out":"393577","total_budget":"2277108","total_no_bookings":"721493","operating_budget":"245702","operating_no_bookings":"-1309913"},{"month":"2027-12","label":"Dec 27","phase":"Modelled","money_in":"111715","money_out":"140083","total_budget":"2248740","total_no_bookings":"631478","operating_budget":"217334","operating_no_bookings":"-1399928"}],"outgoings":[{"item":"Private client suppliers","month":"2026-10","label":"Oct 26","phase":"Forecast","amount":"240669"},{"item":"Public tour suppliers","month":"2026-10","label":"Oct 26","phase":"Forecast","amount":"133030"},{"item":"La Vie en Rose","month":"2026-10","label":"Oct 26","phase":"Forecast","amount":"70000"},{"item":"Client management and commissions","month":"2026-10","label":"Oct 26","phase":"Forecast","amount":"34015"},{"item":"Overheads","month":"2026-10","label":"Oct 26","phase":"Forecast","amount":"49000"},{"item":"Public tour suppliers","month":"2026-11","label":"Nov 26","phase":"Forecast","amount":"99686"},{"item":"Private client suppliers","month":"2026-11","label":"Nov 26","phase":"Forecast","amount":"16433"},{"item":"Client management and commissions","month":"2026-11","label":"Nov 26","phase":"Forecast","amount":"34015"},{"item":"Overheads","month":"2026-11","label":"Nov 26","phase":"Forecast","amount":"49000"},{"item":"Public tour suppliers","month":"2026-12","label":"Dec 26","phase":"Forecast","amount":"32248"},{"item":"Client management and commissions","month":"2026-12","label":"Dec 26","phase":"Forecast","amount":"34015"},{"item":"Overheads","month":"2026-12","label":"Dec 26","phase":"Forecast","amount":"49000"},{"item":"Private client suppliers","month":"2027-01","label":"Jan 27","phase":"Modelled","amount":"51852"},{"item":"Private group suppliers","month":"2027-01","label":"Jan 27","phase":"Modelled","amount":"5892"},{"item":"Client management and commissions","month":"2027-01","label":"Jan 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-01","label":"Jan 27","phase":"Modelled","amount":"53000"},{"item":"Private client suppliers","month":"2027-02","label":"Feb 27","phase":"Modelled","amount":"77778"},{"item":"Private group suppliers","month":"2027-02","label":"Feb 27","phase":"Modelled","amount":"8838"},{"item":"Client management and commissions","month":"2027-02","label":"Feb 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-02","label":"Feb 27","phase":"Modelled","amount":"53000"},{"item":"Private client suppliers","month":"2027-03","label":"Mar 27","phase":"Modelled","amount":"95062"},{"item":"Private group suppliers","month":"2027-03","label":"Mar 27","phase":"Modelled","amount":"14730"},{"item":"Client management and commissions","month":"2027-03","label":"Mar 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-03","label":"Mar 27","phase":"Modelled","amount":"53000"},{"item":"Public tour suppliers","month":"2027-04","label":"Apr 27","phase":"Modelled","amount":"108000"},{"item":"Private client suppliers","month":"2027-04","label":"Apr 27","phase":"Modelled","amount":"112346"},{"item":"Private group suppliers","month":"2027-04","label":"Apr 27","phase":"Modelled","amount":"23568"},{"item":"Client management and commissions","month":"2027-04","label":"Apr 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-04","label":"Apr 27","phase":"Modelled","amount":"53000"},{"item":"Public tour suppliers","month":"2027-05","label":"May 27","phase":"Modelled","amount":"216000"},{"item":"Private client suppliers","month":"2027-05","label":"May 27","phase":"Modelled","amount":"103704"},{"item":"Private group suppliers","month":"2027-05","label":"May 27","phase":"Modelled","amount":"35352"},{"item":"Client management and commissions","month":"2027-05","label":"May 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-05","label":"May 27","phase":"Modelled","amount":"53000"},{"item":"Public tour suppliers","month":"2027-06","label":"Jun 27","phase":"Modelled","amount":"132000"},{"item":"Private client suppliers","month":"2027-06","label":"Jun 27","phase":"Modelled","amount":"86420"},{"item":"Private group suppliers","month":"2027-06","label":"Jun 27","phase":"Modelled","amount":"23568"},{"item":"Client management and commissions","month":"2027-06","label":"Jun 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-06","label":"Jun 27","phase":"Modelled","amount":"53000"},{"item":"Public tour suppliers","month":"2027-07","label":"Jul 27","phase":"Modelled","amount":"24000"},{"item":"Private client suppliers","month":"2027-07","label":"Jul 27","phase":"Modelled","amount":"69136"},{"item":"Private group suppliers","month":"2027-07","label":"Jul 27","phase":"Modelled","amount":"14730"},{"item":"Client management and commissions","month":"2027-07","label":"Jul 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-07","label":"Jul 27","phase":"Modelled","amount":"53000"},{"item":"Private client suppliers","month":"2027-08","label":"Aug 27","phase":"Modelled","amount":"60494"},{"item":"Private group suppliers","month":"2027-08","label":"Aug 27","phase":"Modelled","amount":"20622"},{"item":"Client management and commissions","month":"2027-08","label":"Aug 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-08","label":"Aug 27","phase":"Modelled","amount":"53000"},{"item":"Public tour suppliers","month":"2027-09","label":"Sep 27","phase":"Modelled","amount":"108000"},{"item":"Private client suppliers","month":"2027-09","label":"Sep 27","phase":"Modelled","amount":"77778"},{"item":"Private group suppliers","month":"2027-09","label":"Sep 27","phase":"Modelled","amount":"35352"},{"item":"Client management and commissions","month":"2027-09","label":"Sep 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-09","label":"Sep 27","phase":"Modelled","amount":"53000"},{"item":"Public tour suppliers","month":"2027-10","label":"Oct 27","phase":"Modelled","amount":"360000"},{"item":"Private client suppliers","month":"2027-10","label":"Oct 27","phase":"Modelled","amount":"69136"},{"item":"Private group suppliers","month":"2027-10","label":"Oct 27","phase":"Modelled","amount":"64812"},{"item":"Client management and commissions","month":"2027-10","label":"Oct 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-10","label":"Oct 27","phase":"Modelled","amount":"53000"},{"item":"Public tour suppliers","month":"2027-11","label":"Nov 27","phase":"Modelled","amount":"228000"},{"item":"Private client suppliers","month":"2027-11","label":"Nov 27","phase":"Modelled","amount":"43210"},{"item":"Private group suppliers","month":"2027-11","label":"Nov 27","phase":"Modelled","amount":"35352"},{"item":"Client management and commissions","month":"2027-11","label":"Nov 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-11","label":"Nov 27","phase":"Modelled","amount":"53000"},{"item":"Public tour suppliers","month":"2027-12","label":"Dec 27","phase":"Modelled","amount":"24000"},{"item":"Private client suppliers","month":"2027-12","label":"Dec 27","phase":"Modelled","amount":"17284"},{"item":"Private group suppliers","month":"2027-12","label":"Dec 27","phase":"Modelled","amount":"11784"},{"item":"Client management and commissions","month":"2027-12","label":"Dec 27","phase":"Modelled","amount":"34015"},{"item":"Overheads","month":"2027-12","label":"Dec 27","phase":"Modelled","amount":"53000"}]};
+  var PW = 'TTCASH26!';
+  var gate = document.getElementById('gate'), page = document.getElementById('page');
+
+  function unlock() {
+    gate.hidden = true;
+    page.hidden = false;
+    try { sessionStorage.setItem('tt-cash', '1'); } catch (e) {}
+    if (!window.__drawn) { window.__drawn = true; render(); }
+  }
+  try { if (sessionStorage.getItem('tt-cash') === '1') unlock(); } catch (e) {}
+  document.getElementById('gateForm').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    if (document.getElementById('pw').value === PW) { unlock(); }
+    else { document.getElementById('err').textContent = 'That password is not right.'; }
+  });
+
+  var money = function (n) { return (n < 0 ? '−' : '') + '$' + d3.format(',')(Math.abs(Math.round(n))); };
+  var compact = function (n) {
+    return (n < 0 ? '−' : '') + '$' + new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(Math.abs(n));
+  };
+  var css = function (name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); };
+  var SERIES = function () { return [css('--accent'), css('--olive'), css('--sand'), css('--slate'), css('--muted')]; };
+
+  function summary() {
+    var sum = function (rows, test) {
+      return rows.reduce(function (t, r) { return t + (test(r) ? Number(r.amount) : 0); }, 0);
+    };
+    var total = sum(DATA.cash_position, function () { return true; });
+    var committed = sum(DATA.commitments, function () { return true; });
+    return {
+      total_cash: total,
+      operating: sum(DATA.cash_position, function (r) { return r.group === 'Operating'; }),
+      reserves: sum(DATA.cash_position, function (r) { return r.group === 'Reserve'; }),
+      committed: committed,
+      suppliers: sum(DATA.commitments, function (r) { return r.group === 'Suppliers'; }),
+      other: sum(DATA.commitments, function (r) { return r.group === 'Other'; }),
+      free: total - committed
+    };
+  }
+
+  function tipFor(host) {
+    var el = document.createElement('div');
+    el.className = 'tip';
+    host.appendChild(el);
+    return {
+      show: function (x, y, head, lines) {
+        el.replaceChildren();
+        var h = document.createElement('div');
+        h.className = 'h';
+        h.textContent = head;
+        el.appendChild(h);
+        lines.forEach(function (r) {
+          var row = document.createElement('div');
+          row.className = 'r';
+          if (r.color) {
+            var sw = document.createElement('i');
+            sw.className = 'sw';
+            sw.style.background = r.color;
+            row.appendChild(sw);
+          }
+          var t = document.createElement('span');
+          t.textContent = r.text;
+          row.appendChild(t);
+          el.appendChild(row);
+        });
+        el.style.opacity = 1;
+        el.style.left = Math.max(0, Math.min(host.clientWidth - el.offsetWidth, x - el.offsetWidth / 2)) + 'px';
+        el.style.top = Math.max(0, y - el.offsetHeight - 10) + 'px';
+      },
+      hide: function () { el.style.opacity = 0; }
+    };
+  }
+
+  function widest(svg, values, fmt) {
+    var w = 0;
+    values.forEach(function (v) {
+      var t = svg.append('text').attr('font-size', 11).attr('opacity', 0).text(fmt(v));
+      w = Math.max(w, t.node().getComputedTextLength());
+      t.remove();
+    });
+    return w;
+  }
+
+  function fillTables() {
+    var s = summary();
+    [['f-total', 'total_cash'], ['f-committed', 'committed'], ['f-free', 'free'],
+     ['f-op', 'operating'], ['f-res', 'reserves'], ['f-tot2', 'total_cash'],
+     ['f-sup', 'suppliers'], ['f-oth', 'other'], ['f-tot3', 'committed']].forEach(function (p) {
+      document.getElementById(p[0]).textContent = money(s[p[1]]);
+    });
+
+    var fill = function (id, rows, cols) {
+      var tb = document.getElementById(id);
+      tb.replaceChildren();
+      rows.forEach(function (r) {
+        var tr = document.createElement('tr');
+        cols.forEach(function (c) {
+          var td = document.createElement('td');
+          if (c.cls) td.className = c.cls;
+          td.textContent = c.fmt ? c.fmt(r) : r[c.key];
+          tr.appendChild(td);
+        });
+        tb.appendChild(tr);
+      });
+    };
+    fill('t-cash', DATA.cash_position, [
+      { key: 'account' },
+      { cls: 'n', fmt: function (r) { return money(Number(r.amount)); } },
+      { cls: 'why', key: 'note' }]);
+    fill('t-commit', DATA.commitments, [
+      { key: 'item' },
+      { cls: 'n', fmt: function (r) { return money(Number(r.amount)); } },
+      { cls: 'why', key: 'note' }]);
+    fill('t-ratio', DATA.cost_ratio, [
+      { key: 'basis' }, { key: 'period' },
+      { cls: 'n', fmt: function (r) { return money(Number(r.revenue)); } },
+      { cls: 'n', fmt: function (r) { return money(Number(r.cost_of_sales)); } },
+      { cls: 'n', fmt: function (r) { return d3.format('.1%')(Number(r.pct)); } },
+      { cls: 'why', key: 'note' }]);
+  }
+
+  function cashChart() {
+    var host = document.getElementById('cashChart');
+    host.replaceChildren();
+    var rows = DATA.cash_path;
+    var W = Math.max(280, host.clientWidth), H = 330;
+    var svg = d3.select(host).append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + W + ' ' + H);
+    var labels = rows.map(function (r) { return r.label; });
+    var num = function (v) { return (v === '' || v == null) ? null : Number(v); };
+    var lastActual = rows.reduce(function (a, r, i) { return r.phase === 'Actual' ? i : a; }, 0);
+
+    var totals = rows.map(function (r, i) { return { i: i, v: num(r.total_budget) }; }).filter(function (p) { return p.v !== null; });
+    var floorT = rows.map(function (r, i) { return { i: i, v: num(r.total_no_bookings) }; })
+      .filter(function (p) { return p.v !== null && p.i >= lastActual; });
+    var opLine = rows.map(function (r, i) { return { i: i, v: num(r.operating_budget) }; }).filter(function (p) { return p.v !== null; });
+    var all = totals.concat(floorT, opLine).map(function (p) { return p.v; });
+
+    var yDom = [Math.min(0, d3.min(all)) * 1.14, d3.max(all) * 1.08];
+    var left = Math.ceil(widest(svg, d3.scaleLinear(yDom, [0, 1]).ticks(5), compact)) + 14;
+    var m = { t: 16, r: 14, b: 34, l: left };
+    var x = d3.scalePoint(d3.range(labels.length), [m.l, W - m.r]).padding(0);
+    var y = d3.scaleLinear(yDom, [H - m.b, m.t]);
+    var C = SERIES();
+
+    svg.append('g').selectAll('line').data(y.ticks(5)).join('line')
+      .attr('x1', m.l).attr('x2', W - m.r).attr('y1', y).attr('y2', y)
+      .attr('stroke', css('--line')).attr('stroke-width', 1);
+    svg.append('g').selectAll('text').data(y.ticks(5)).join('text')
+      .attr('x', m.l - 8).attr('y', y).attr('dy', '0.32em').attr('text-anchor', 'end')
+      .attr('fill', css('--muted')).attr('font-size', 11).text(compact);
+    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(0)).attr('y2', y(0))
+      .attr('stroke', css('--muted')).attr('stroke-width', 1).attr('stroke-dasharray', '3 3').attr('opacity', .5);
+
+    var yearStart = rows.findIndex(function (r) { return r.month.slice(0, 4) === '2027'; });
+    if (yearStart > 0) {
+      svg.append('line').attr('x1', x(yearStart) - x.step() / 2).attr('x2', x(yearStart) - x.step() / 2)
+        .attr('y1', m.t).attr('y2', H - m.b).attr('stroke', css('--muted'))
+        .attr('stroke-width', 1).attr('stroke-dasharray', '2 3').attr('opacity', .45);
+    }
+
+    var labW = Math.ceil(widest(svg, labels, function (t) { return t; })) + 12;
+    var step = Math.max(1, Math.ceil(labW / (x.step() || (W - m.l - m.r))));
+    svg.append('g').selectAll('text')
+      .data(labels.map(function (d, i) { return { d: d, i: i }; }).filter(function (p) { return p.i % step === 0; }))
+      .join('text').attr('x', function (p) { return x(p.i); }).attr('y', H - 12).attr('text-anchor', 'middle')
+      .attr('fill', css('--muted')).attr('font-size', 11).text(function (p) { return p.d; });
+
+    var line = d3.line().x(function (p) { return x(p.i); }).y(function (p) { return y(p.v); });
+    var path = function (d, color, dash, w) {
+      return svg.append('path').datum(d).attr('fill', 'none').attr('stroke', color)
+        .attr('stroke-width', w || 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round')
+        .attr('stroke-dasharray', dash).attr('d', line);
+    };
+    path(opLine, css('--muted'), null, 1.5);
+    path(floorT, css('--muted'), '2 4');
+    path(totals.filter(function (p) { return p.i >= lastActual; }), C[0], '6 4');
+    path(totals.filter(function (p) { return p.i <= lastActual; }), css('--fg'), null);
+    svg.append('circle').attr('cx', x(lastActual)).attr('cy', y(totals[lastActual].v)).attr('r', 3.5).attr('fill', css('--fg'));
+
+    var tip = tipFor(host);
+    svg.append('rect').attr('width', W).attr('height', H).attr('fill', 'transparent')
+      .on('mousemove', function (ev) {
+        var mx = d3.pointer(ev, this)[0];
+        var i = Math.max(0, Math.min(labels.length - 1, Math.round((mx - x(0)) / x.step())));
+        var r = rows[i], lines = [], vals = [];
+        var tb = num(r.total_budget), tn = num(r.total_no_bookings), op = num(r.operating_budget);
+        if (tb !== null) { lines.push({ color: i <= lastActual ? css('--fg') : C[0], text: 'Total cash  ' + money(tb) }); vals.push(tb); }
+        if (tn !== null && i > lastActual) { lines.push({ color: css('--muted'), text: 'If no more bookings  ' + money(tn) }); vals.push(tn); }
+        if (op !== null) { lines.push({ color: css('--muted'), text: 'Working account  ' + money(op) }); }
+        if (!lines.length) { return tip.hide(); }
+        tip.show(x(i), y(d3.max(vals)), r.label + ' · ' + r.phase, lines);
+      })
+      .on('mouseleave', tip.hide);
+  }
+
+  function outChart() {
+    var host = document.getElementById('outChart');
+    host.replaceChildren();
+    var src = DATA.outgoings;
+    var items = [], order = [], labelOf = {}, byKey = {};
+    src.forEach(function (r) { if (items.indexOf(r.item) < 0) items.push(r.item); });
+    src.forEach(function (r) {
+      var key, label;
+      if (r.month.slice(0, 4) === '2026') { key = r.month; label = r.label; }
+      else { var q = Math.floor((Number(r.month.slice(5)) - 1) / 3) + 1; key = '2027-Q' + q; label = 'Q' + q + ' 27'; }
+      if (!byKey[key]) { byKey[key] = { key: key, label: label, total: 0 }; order.push(key); labelOf[key] = label; }
+      byKey[key][r.item] = (byKey[key][r.item] || 0) + Number(r.amount);
+      byKey[key].total += Number(r.amount);
+    });
+    var buckets = order.map(function (k) {
+      items.forEach(function (it) { if (byKey[k][it] === undefined) byKey[k][it] = 0; });
+      return byKey[k];
+    });
+
+    var W = Math.max(280, host.clientWidth);
+    var probe = d3.select(host).append('svg').attr('width', 0).attr('height', 0);
+    var yMax = d3.max(buckets, function (b) { return b.total; }) * 1.16;
+    var left = Math.ceil(widest(probe, d3.scaleLinear([0, yMax], [0, 1]).ticks(5), compact)) + 14;
+    var legW = items.map(function (it) {
+      var t = probe.append('text').attr('font-size', 11).attr('opacity', 0).text(it);
+      var w = t.node().getComputedTextLength() + 30;
+      t.remove();
+      return w;
+    });
+    probe.remove();
+
+    var legendRows = 1, used = 0, avail = W - left - 14;
+    legW.forEach(function (w) { if (used > 0 && used + w > avail) { legendRows += 1; used = 0; } used += w; });
+
+    var H = 300 + legendRows * 18;
+    var svg = d3.select(host).append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + W + ' ' + H);
+    var m = { t: 26, r: 14, b: 34 + legendRows * 18, l: left };
+    var x = d3.scaleBand(order, [m.l, W - m.r]).padding(0.3);
+    var y = d3.scaleLinear([0, yMax], [H - m.b, m.t]);
+    var C = SERIES();
+    var color = d3.scaleOrdinal(items, C);
+    var bw = Math.min(x.bandwidth(), 56);
+    var cx = function (k) { return x(k) + x.bandwidth() / 2; };
+
+    svg.append('g').selectAll('line').data(y.ticks(5)).join('line')
+      .attr('x1', m.l).attr('x2', W - m.r).attr('y1', y).attr('y2', y)
+      .attr('stroke', css('--line')).attr('stroke-width', 1);
+    svg.append('g').selectAll('text').data(y.ticks(5)).join('text')
+      .attr('x', m.l - 8).attr('y', y).attr('dy', '0.32em').attr('text-anchor', 'end')
+      .attr('fill', css('--muted')).attr('font-size', 11).text(compact);
+
+    var tip = tipFor(host);
+    svg.append('g').selectAll('g').data(d3.stack().keys(items)(buckets)).join('g')
+      .attr('fill', function (s) { return color(s.key); })
+      .selectAll('rect').data(function (s) {
+        return s.map(function (p) { p.key = s.key; return p; });
+      }).join('rect')
+      .attr('x', function (p) { return cx(p.data.key) - bw / 2; }).attr('width', bw)
+      .attr('y', function (p) { return y(p[1]); })
+      .attr('height', function (p) { return Math.max(0, y(p[0]) - y(p[1])); }).attr('rx', 2)
+      .on('mousemove', function (ev, p) {
+        var mx = d3.pointer(ev, host)[0];
+        var lines = items.filter(function (it) { return p.data[it] > 0; }).map(function (it) {
+          return { color: color(it), text: it + '  ' + money(p.data[it]) };
+        });
+        lines.push({ text: 'Total  ' + money(p.data.total) });
+        tip.show(mx, y(p.data.total), p.data.label, lines);
+      })
+      .on('mouseleave', tip.hide);
+
+    svg.append('g').selectAll('text').data(buckets).join('text')
+      .attr('x', function (b) { return cx(b.key); }).attr('y', function (b) { return y(b.total) - 8; })
+      .attr('text-anchor', 'middle').attr('fill', css('--fg')).attr('font-size', 11)
+      .text(function (b) { return compact(b.total); });
+    svg.append('g').selectAll('text').data(order).join('text')
+      .attr('x', cx).attr('y', H - 18 - legendRows * 18).attr('text-anchor', 'middle')
+      .attr('fill', css('--muted')).attr('font-size', 11).text(function (k) { return labelOf[k]; });
+
+    var legend = svg.append('g'), off = 0, row = 0;
+    items.forEach(function (it, i) {
+      if (off > 0 && off + legW[i] > avail) { row += 1; off = 0; }
+      var g = legend.append('g')
+        .attr('transform', 'translate(' + (m.l + off) + ',' + (H - 10 - (legendRows - 1 - row) * 18) + ')');
+      g.append('rect').attr('width', 8).attr('height', 8).attr('y', -8).attr('rx', 2).attr('fill', color(it));
+      g.append('text').attr('x', 12).attr('fill', css('--muted')).attr('font-size', 11).text(it);
+      off += legW[i];
+    });
+  }
+
+  function render() { fillTables(); cashChart(); outChart(); }
+
+  var t;
+  window.addEventListener('resize', function () {
+    if (page.hidden) { return; }
+    clearTimeout(t);
+    t = setTimeout(function () { cashChart(); outChart(); }, 150);
+  });
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+      if (!page.hidden) { render(); }
+    });
+  }
+})();
+</script>
+</body>
+</html>
